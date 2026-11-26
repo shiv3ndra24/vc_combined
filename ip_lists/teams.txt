@@ -1,0 +1,25 @@
+# Microsoft Teams media relay ranges.
+# One CIDR per line, '#' starts a comment. Read at start-up by vc_capture (--ip-dir);
+# the same file is compiled into the binary as the fallback. This ONE list is used both by the
+# capture gate and by the metrics (server side = direction), so the two can no longer drift
+# (before vc_combined there were two lists and 2603:1063 was missing from the metrics one).
+# Gate rule (Teams/Meet engine): UDP, source or destination address in this list; no port rule.
+#
+# Source, checked 2026-11-06 (page dated 10/31/2024):
+#   https://learn.microsoft.com/en-us/microsoft-365/enterprise/urls-and-ip-address-ranges
+#   ID 11 (Optimize, UDP 3478-3481, the media row):
+52.112.0.0/14
+52.122.0.0/15
+2603:1063::/38
+#   ID 12 (Allow, TCP 443/80, signalling). Kept because the old gate had them; they are not a
+#   media row, so UDP RTP is not expected from them (harmless: the RFC 7983 demux keeps RTP only).
+2603:1027::/48
+2603:1037::/48
+2603:1047::/48
+2603:1057::/48
+2620:1ec:6::/48
+2620:1ec:40::/42
+#   Old METRICS-only prefix "2603:1010" (text prefix = 2603:1010::/32). It was never in the gate,
+#   so it never admitted a packet; it is in neither ID 11 nor ID 12. Not activated, so the gate
+#   stays exactly what it was. Remove the '#' to admit it.
+# 2603:1010::/32

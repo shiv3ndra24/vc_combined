@@ -1,0 +1,22 @@
+[package]
+name = "zoom_pipeline"
+version = "0.2.0"
+edition = "2021"
+description = "Retina-independent live pipeline for zoom_capture: frame parser, IP gate, de-dup, per-core aggregation, Influx exporter."
+
+[lib]
+name = "zoom_pipeline"
+path = "src/lib.rs"
+
+[dependencies]
+crossbeam-channel = "0.5"
+ureq = { version = "2.9", default-features = false, features = ["tls"] }
+
+[features]
+# Mirror-twin de-duplication. ON by default. When the campus mirror no longer sends every
+# packet twice, remove "dedup" from `default` (one line) and every de-dup branch becomes dead
+# code that the compiler removes; `--dedup fp` is then refused at start-up.
+default = ["dedup"]
+dedup = []
+
+# Release/bench profiles live in the workspace root Cargo.toml (Cargo ignores them here).

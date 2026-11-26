@@ -1,0 +1,33 @@
+# Same as config.toml (NIC 0000:05:00.0, cores 2,4,6,8, mempool 262144) except [online] duration.
+# Retina ignores rx_queues: the number of RX queues equals the number of cores.
+main_core = 0
+nb_memory_channels = 8
+
+[mempool]
+capacity  = 262144
+cache_size = 512
+
+[online]
+duration = 3600     # 60 minutes (the old comment said 10). The production config.toml has 28800 (8 h).
+nb_rxd       = 8192
+promiscuous  = true
+mtu          = 1500
+hardware_assist = false
+dpdk_supl_args = ["--socket-mem=2048,2016"]
+
+[[online.ports]]
+device = "0000:05:00.0"
+cores = [2, 4, 6, 8]
+rx_queues = [0, 1, 2, 3]
+
+[conntrack]
+max_connections      = 5000000
+max_out_of_order     = 1000
+timeout_resolution   = 100
+udp_inactivity_timeout  = 60000
+tcp_inactivity_timeout  = 300000
+tcp_establish_timeout   = 5000
+
+[online.monitor.display]
+throughput    = true
+mempool_usage = true

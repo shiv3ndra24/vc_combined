@@ -1,0 +1,16 @@
+# Google Meet media ranges.
+# One CIDR per line, '#' starts a comment. Read at start-up by vc_capture (--ip-dir);
+# the same file is compiled into the binary as the fallback (gate and metrics use this one list).
+# Gate rule (Teams/Meet engine): UDP, source or destination address in this list; no port rule.
+# Google's ports for reference (no port gate is applied): UDP 3478, 19302-19309.
+#
+# Source, checked 2026-11-06: https://support.google.com/a/answer/1279090  (step 3)
+# Unchanged from the previous crate.
+# Workspace:
+74.125.250.0/24
+74.125.247.128/32
+2001:4860:4864:5::/64
+2001:4860:4864:4:8000::/128
+# Consumer:
+142.250.82.0/24
+2001:4860:4864:6::/64

@@ -1,0 +1,4 @@
+target/
+**/captures/
+vc_capture/vc_qoe.env
+*.lp

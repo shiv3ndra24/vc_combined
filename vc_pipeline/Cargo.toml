@@ -1,0 +1,19 @@
+[package]
+name = "vc_pipeline"
+version = "0.3.0"
+edition = "2024"
+description = "Teams + Meet engine of vc_capture: IP gate, RFC 7983 demux, RTP records, de-dup, CSV/pcap after de-dup, per-session metrics, Influx export. Retina-independent (tested without DPDK)."
+
+[lib]
+name = "vc_pipeline"
+path = "src/lib.rs"
+
+[dependencies]
+crossbeam-channel = "0.5"
+ureq = { version = "2.9", features = ["tls"] }
+serde = { version = "1", features = ["derive"] }
+
+[features]
+# Mirror-twin de-duplication, ON by default; see zoom_pipeline/Cargo.toml for the one-line switch-off.
+default = ["dedup"]
+dedup = []

@@ -1,0 +1,30 @@
+[package]
+name = "vc_capture"
+version = "0.3.0"
+edition = "2024"
+description = "One Retina capture for Zoom, Teams and Meet: a router in the callback hands each packet to the Zoom engine (zoom_pipeline) or the Teams/Meet engine (vc_pipeline)."
+
+[[bin]]
+name = "vc_capture"
+path = "src/main.rs"
+
+[dependencies]
+# Retina crates. Paths are relative to THIS folder and must reach the Retina workspace root.
+# Layout used here: <retina root>/vc_combined/vc_capture  ->  "../../core" etc.
+# If you put vc_combined one level deeper, add one "../" to each of the three lines.
+retina-core = { path = "../../core" }
+retina-filtergen = { path = "../../filtergen" }
+retina-datatypes = { path = "../../datatypes" }
+
+zoom_pipeline = { path = "../zoom_pipeline", default-features = false }
+vc_pipeline = { path = "../vc_pipeline", default-features = false }
+
+clap = { version = "4.5", features = ["derive"] }
+toml = "0.8"
+
+[features]
+# THE de-dup switch for the whole binary (both engines). To build without any de-dup code once
+# the campus mirror is fixed: change the next line to `default = []` (or build with
+# `--no-default-features`). Then `--dedup` accepts only `off`.
+default = ["dedup"]
+dedup = ["zoom_pipeline/dedup", "vc_pipeline/dedup"]
